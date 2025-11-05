@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import tursoService from '../services/tursoService';
 import { ItemTemplate, Location, InventoryItem, ConservationState } from '../types';
-import { Input, Select, Textarea, FormActions } from './common';
+import { Input, Select, Textarea, FormActions, DatalistInput } from './common';
 
 interface InventoryItemFormProps {
     onSuccess: () => void;
@@ -64,15 +64,24 @@ const InventoryItemForm: React.FC<InventoryItemFormProps> = ({ onSuccess, onCanc
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             {error && <div className="text-red-500 bg-red-100 p-3 rounded-md">{error}</div>}
-            <Select label="Item Template" id="templateId" value={templateId} onChange={e => setTemplateId(e.target.value)} required>
-                <option value="">Select a template...</option>
-                {templates.map(t => <option key={t.id} value={t.id}>{t.name} ({t.assetCode})</option>)}
-            </Select>
-            <Select label="Location" id="locationId" value={locationId} onChange={e => setLocationId(e.target.value)}>
-                <option value="">Select a location (optional)...</option>
-                {locations.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
-            </Select>
-
+            <DatalistInput
+                label="Item Template"
+                id="templateId"
+                selectedValue={templateId}
+                onValueChange={setTemplateId}
+                options={templates.map(t => ({ value: t.id, label: `${t.name} (${t.assetCode})` }))}
+                placeholder="Type to search for a template..."
+                required
+            />
+            <DatalistInput
+                label="Location"
+                id="locationId"
+                selectedValue={locationId}
+                onValueChange={setLocationId}
+                options={locations.map(l => ({ value: l.id, label: l.name }))}
+                placeholder="Type to search for a location (optional)..."
+            />
+            
             <fieldset className="border border-slate-300 dark:border-slate-600 p-4 rounded-md">
                 <legend className="text-sm font-medium px-2">Quantities by Conservation State</legend>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -128,14 +137,23 @@ export const InventoryItemEditForm: React.FC<InventoryItemEditFormProps> = ({ on
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             {error && <div className="text-red-500 bg-red-100 p-3 rounded-md">{error}</div>}
-             <Select label="Item Template" id="templateId" name="templateId" value={formData.templateId} onChange={handleChange} required>
-                <option value="">Select a template...</option>
-                {templates.map(t => <option key={t.id} value={t.id}>{t.name} ({t.assetCode})</option>)}
-            </Select>
-            <Select label="Location" id="locationId" name="locationId" value={formData.locationId || ''} onChange={handleChange}>
-                <option value="">Select a location (optional)...</option>
-                {locations.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
-            </Select>
+            <DatalistInput
+                label="Item Template"
+                id="templateId"
+                selectedValue={formData.templateId || ''}
+                onValueChange={(value) => setFormData(prev => ({ ...prev, templateId: value }))}
+                options={templates.map(t => ({ value: t.id, label: `${t.name} (${t.assetCode})` }))}
+                placeholder="Type to search..."
+                required
+            />
+            <DatalistInput
+                label="Location"
+                id="locationId"
+                selectedValue={formData.locationId || ''}
+                onValueChange={(value) => setFormData(prev => ({ ...prev, locationId: value }))}
+                options={locations.map(l => ({ value: l.id, label: l.name }))}
+                placeholder="Type to search (optional)..."
+            />
             <Input label="Serial Number" id="serial" name="serial" value={formData.serial || ''} onChange={handleChange} />
             <Input label="Situation" id="situation" name="situation" value={formData.situation || ''} onChange={handleChange} />
             <Select label="Conservation State" id="conservationState" name="conservationState" value={formData.conservationState} onChange={handleChange} required>

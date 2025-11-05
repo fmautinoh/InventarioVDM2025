@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -71,3 +71,51 @@ export const FormActions: React.FC<FormActionsProps> = ({ onCancel, isSubmitting
       </button>
     </div>
 );
+
+interface DatalistInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
+  label: string;
+  id: string;
+  options: { value: string; label:string; }[];
+  selectedValue: string;
+  onValueChange: (value: string) => void;
+}
+
+export const DatalistInput: React.FC<DatalistInputProps> = ({ label, id, options, selectedValue, onValueChange, ...props }) => {
+    const datalistId = `${id}-list`;
+    const [inputValue, setInputValue] = useState('');
+
+    useEffect(() => {
+        const selectedOption = options.find(opt => opt.value === selectedValue);
+        setInputValue(selectedOption ? selectedOption.label : '');
+    }, [selectedValue, options]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const currentInput = e.target.value;
+        setInputValue(currentInput);
+
+        const option = options.find(opt => opt.label === currentInput);
+        if (option) {
+            onValueChange(option.value);
+        } else if (currentInput === '') {
+            onValueChange('');
+        }
+    };
+    
+    return (
+        <div>
+            <label htmlFor={id} className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{label}</label>
+            <input
+                id={id}
+                autoComplete="off"
+                {...props}
+                value={inputValue}
+                list={datalistId}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+            />
+            <datalist id={datalistId}>
+                {options.map(opt => <option key={opt.value} value={opt.label} />)}
+            </datalist>
+        </div>
+    );
+};
