@@ -1,0 +1,5 @@
+{
+  "name": "Inventario VDM",
+  "description": "A comprehensive inventory management application to perform CRUD operations on items, templates, and locations, with the ability to export inventory reports to Excel. This app is designed to interact with a Turso SQLite database backend.",
+  "requestFramePermissions": []
+}
