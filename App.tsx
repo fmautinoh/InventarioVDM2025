@@ -174,7 +174,7 @@ const App: React.FC = () => {
         <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
             <header className="bg-white dark:bg-slate-800 shadow-md">
                 <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-                    <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Turso Inventory</h1>
+                    <h1 className="text-2xl font-bold text-slate-800 dark:text-white">VDM INVENTARIO</h1>
                     <nav className="flex items-center space-x-2 sm:space-x-4">
                         <button onClick={() => setView('inventory')} className={`px-3 py-2 rounded-md text-sm font-medium ${view === 'inventory' ? 'bg-blue-600 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>Inventory</button>
                         <button onClick={() => setView('templates')} className={`px-3 py-2 rounded-md text-sm font-medium ${view === 'templates' ? 'bg-blue-600 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>Templates</button>
